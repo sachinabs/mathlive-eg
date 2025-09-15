@@ -22,6 +22,8 @@ export default function MathKeyboardEditor() {
                 "symbols",
                 "alphabetic",
                 "greek",
+                "compact",
+              
             ];
             window.mathVirtualKeyboard.showToolbar = true;
         }
