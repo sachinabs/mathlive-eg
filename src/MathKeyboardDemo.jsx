@@ -99,7 +99,7 @@ export default function MathKeyboardEditor() {
                 }}
             ></math-field>
             <button onClick={addEquation} style={{ marginTop: "10px" }}>
-                ➕ Add Equation
+                Add Equation
             </button>
 
             {/* Text input */}
@@ -115,7 +115,7 @@ export default function MathKeyboardEditor() {
                 }}
             />
             <button onClick={addText} style={{ marginTop: "10px" }}>
-                ➕ Add Text
+              Add Text
             </button>
 
             {/* Preview */}
@@ -151,7 +151,7 @@ export default function MathKeyboardEditor() {
                     cursor: "pointer",
                 }}
             >
-                ⬇️ Download as PDF
+              Download as PDF
             </button>
         </div>
     );

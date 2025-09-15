@@ -64,7 +64,7 @@ export default function MathBookEditor() {
         }}
       ></math-field>
       <button onClick={addEquation} style={{ marginTop: "10px" }}>
-        ➕ Add Equation
+        Add Equation
       </button>
 
       {/* Text input */}
@@ -80,7 +80,7 @@ export default function MathBookEditor() {
         }}
       />
       <button onClick={addText} style={{ marginTop: "10px" }}>
-        ➕ Add Text
+         Add Text
       </button>
 
       {/* Preview */}
