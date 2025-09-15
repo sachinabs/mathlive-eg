@@ -1,0 +1,106 @@
+import React, { useEffect, useRef, useState } from "react";
+import "mathlive";
+import katex from "katex";
+import "katex/dist/katex.min.css";
+
+export default function MathBookEditor() {
+  const mathfieldRef = useRef(null);
+  const [lines, setLines] = useState([]);
+  const [text, setText] = useState("");
+
+  useEffect(() => {
+    if (mathfieldRef.current) {
+      mathfieldRef.current.setAttribute("virtual-keyboard-mode", "onfocus");
+      mathfieldRef.current.setAttribute("virtual-keyboard-theme", "apple");
+      mathfieldRef.current.setAttribute("menu", "true");
+    }
+
+    if (window.mathVirtualKeyboard) {
+      window.mathVirtualKeyboard.layouts = [
+        "numeric",
+        "symbols",
+        "alphabetic",
+        "greek",
+      ];
+      window.mathVirtualKeyboard.showToolbar = true;
+    }
+  }, []);
+
+  const addEquation = () => {
+    if (mathfieldRef.current) {
+      const latex = mathfieldRef.current.value;
+      if (latex.trim()) {
+        // Convert LaTeX → HTML using KaTeX
+        const html = katex.renderToString(latex, {
+          throwOnError: false,
+        });
+
+        setLines([...lines, { type: "math", latex, html }]);
+        mathfieldRef.current.value = "";
+      }
+    }
+  };
+
+  const addText = () => {
+    if (text.trim()) {
+      setLines([...lines, { type: "text", value: text }]);
+      setText("");
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2>Math + Text Editor (Book Mode)</h2>
+
+      {/* Math input */}
+      <math-field
+        ref={mathfieldRef}
+        style={{
+          border: "1px solid #ccc",
+          padding: "8px",
+          fontSize: "20px",
+          minWidth: "300px",
+          display: "block",
+        }}
+      ></math-field>
+      <button onClick={addEquation} style={{ marginTop: "10px" }}>
+        ➕ Add Equation
+      </button>
+
+      {/* Text input */}
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Write explanation text..."
+        style={{
+          marginTop: "20px",
+          width: "100%",
+          height: "80px",
+          padding: "8px",
+        }}
+      />
+      <button onClick={addText} style={{ marginTop: "10px" }}>
+        ➕ Add Text
+      </button>
+
+      {/* Preview */}
+      <div style={{ marginTop: "20px" }}>
+        <h3>Preview</h3>
+        <div style={{ border: "1px solid #ddd", padding: "10px" }}>
+          {lines.map((line, i) =>
+            line.type === "text" ? (
+              <p key={i}>{line.value}</p>
+            ) : (
+              <p key={i} dangerouslySetInnerHTML={{ __html: line.html }} />
+            )
+          )}
+        </div>
+      </div>
+
+      {/* Export JSON (for your book DB) */}
+      <pre style={{ marginTop: "20px", background: "#f5f5f5", padding: "10px" }}>
+        {JSON.stringify(lines, null, 2)}
+      </pre>
+    </div>
+  );
+}
