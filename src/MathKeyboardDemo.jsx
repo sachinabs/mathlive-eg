@@ -1,0 +1,69 @@
+import React, { useEffect, useRef } from "react";
+import "mathlive";
+
+export default function MathKeyboardDemo() {
+  const mathfieldRef = useRef(null);
+
+  useEffect(() => {
+    if (mathfieldRef.current) {
+      // preload LaTeX
+      mathfieldRef.current.value = "\\frac{a}{b}";
+
+      // enable keyboard
+      mathfieldRef.current.setAttribute("virtual-keyboard-mode", "onfocus");
+      mathfieldRef.current.setAttribute("virtual-keyboard-theme", "apple");
+
+      // ✅ force-enable the context menu programmatically
+      mathfieldRef.current.menu = true;
+      // or (depending on version):
+      // mathfieldRef.current.setOptions({ menu: true });
+    }
+
+    // configure virtual keyboard globally
+    if (window.mathVirtualKeyboard) {
+      window.mathVirtualKeyboard.layouts = [
+        "numeric",
+        "symbols",
+        "alphabetic",
+        "greek",
+      ];
+      window.mathVirtualKeyboard.showToolbar = true;
+    }
+  }, []);
+
+  const toggleKeyboard = () => {
+    if (window.mathVirtualKeyboard) {
+      window.mathVirtualKeyboard.visible =
+        !window.mathVirtualKeyboard.visible;
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2>MathLive Virtual Keyboard + Menu</h2>
+
+      <math-field
+        ref={mathfieldRef}
+        style={{
+          border: "1px solid #ccc",
+          padding: "8px",
+          fontSize: "20px",
+          minWidth: "300px",
+          display: "block",
+        }}
+      ></math-field>
+
+      <button
+        onClick={toggleKeyboard}
+        style={{
+          marginTop: "10px",
+          padding: "8px 12px",
+          fontSize: "16px",
+          cursor: "pointer",
+        }}
+      >
+        Toggle Keyboard
+      </button>
+    </div>
+  );
+}
